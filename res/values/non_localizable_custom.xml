@@ -55,6 +55,7 @@
 	<bool name="enable_push_id">true</bool>
 	<string name="push_sender_id">929724111839</string><!--firebase 929724111839 !! gcm 622464153529 -->
 	<string name="push_type">firebase</string>
+	<string name="registration_server_url"></string>
 
 	<!-- Call -->
 	<bool name="forbid_self_call">false</bool>
