@@ -93,9 +93,9 @@ public class FirebaseMessaging extends FirebaseMessagingService {
         
         Notification mNotif = Compatibility.createNotification(
                 this, getString(R.string.incoming), msg, R.drawable.linphone_notification_icon,
-                R.mipmap.ic_launcher, null, mNotifContentIntent, true, Notification.PRIORITY_HIGH);
+                R.mipmap.ic_launcher, null, mNotifContentIntent, true, Notification.PRIORITY_DEFAULT);
 
-        mNotif.defaults |= Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS;
+        mNotif.defaults |= Notification.DEFAULT_SOUND;
 
         mNM.notify(INCALL_NOTIF_ID, mNotif);
     }
