@@ -19,10 +19,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package org.linphone.firebase;
 
+import android.os.AsyncTask;
+
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.linphone.LinphonePreferences;
+import org.linphone.R;
 import org.linphone.UIThreadDispatcher;
 
 
@@ -38,11 +47,52 @@ public class FirebaseIdService extends FirebaseInstanceIdService {
 
     private void sendRegistrationToServer(final String refreshedToken) {
         android.util.Log.i("FirebaseIdService", "[Push Notification] Send token to server: " + refreshedToken);
+        String server_url = getString(R.string.registration_server_url);
+        new AsyncPost().execute(server_url, refreshedToken);
         UIThreadDispatcher.dispatch(new Runnable() {
             @Override
             public void run() {
                 LinphonePreferences.instance().setPushNotificationRegistrationID(refreshedToken);
             }
         });
+    }
+
+    private static class AsyncPost extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... params) {
+            if (params[0] == null || params[1] == null) {
+                return null;
+            }
+            URL url;
+            try {
+                url = new URL("http://" + params[0]);
+            } catch (MalformedURLException e) {
+                android.util.Log.i("FirebaseIdService", "[Push Notification] Invalid server URL");
+                return null;
+            }
+
+            String body = "register=" + params[1];
+            byte bodyByte[] = body.getBytes();
+
+            HttpURLConnection con = null;
+            try {
+                con = (HttpURLConnection) url.openConnection();
+                con.setDoOutput(true);
+                con.setUseCaches(false);
+                con.setFixedLengthStreamingMode(bodyByte.length);
+                con.setRequestMethod("POST");
+                OutputStream out = con.getOutputStream();
+                out.write(bodyByte);
+                out.flush();
+                out.close();
+            } catch (IOException e) {
+                android.util.Log.i("FirebaseIdService", "[Push Notification] Unable to send token to server");
+            } finally {
+                if (con != null) {
+                    con.disconnect();
+                }
+            }
+            return null;
+        }
     }
 }
