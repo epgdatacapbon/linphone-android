@@ -314,7 +314,7 @@ public final class LinphoneService extends Service {
 		}
 
 		mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		mNM.cancel(INCALL_NOTIF_ID); // in case of crash the icon is not removed
+//		mNM.cancel(INCALL_NOTIF_ID); // in case of crash the icon is not removed
 		Compatibility.CreateChannel(this);
 
 		Intent notifIntent = new Intent(this, incomingReceivedActivity);
@@ -452,7 +452,7 @@ public final class LinphoneService extends Service {
 			}, 5000);
 		}
 
-		//make sure the application will at least wakes up every 10 mn when background mode is enabled.
+		//make sure the application will at least wakes up every 10 min when background mode is enabled.
 		if (LinphonePreferences.instance().isBackgroundModeEnabled()) {
 			Intent intent = new Intent(this, KeepAliveReceiver.class);
 			PendingIntent keepAlivePendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
