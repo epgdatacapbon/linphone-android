@@ -37,7 +37,7 @@ import android.os.SystemClock;
 public class KeepAliveReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		if (!LinphoneService.isReady()) {
+		if (!LinphoneService.isReady() || !LinphonePreferences.instance().isBackgroundModeEnabled()) {
 			return;
 		} else {
 			boolean isDebugEnabled = LinphonePreferences.instance().isDebugEnabled();
