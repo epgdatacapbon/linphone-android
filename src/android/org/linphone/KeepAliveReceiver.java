@@ -56,7 +56,7 @@ public class KeepAliveReceiver extends BroadcastReceiver {
 				} catch (InterruptedException e) {
 					Log.e("Cannot sleep for 2s", e);
 				} finally {
-					//make sure the application will at least wakes up every 10 mn
+					//make sure the application will at least wakes up every 10 min
 					Intent newIntent = new Intent(context, KeepAliveReceiver.class);
 					PendingIntent keepAlivePendingIntent = PendingIntent.getBroadcast(context, 0, newIntent, PendingIntent.FLAG_ONE_SHOT);
 
