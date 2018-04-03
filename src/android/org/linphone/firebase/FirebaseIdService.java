@@ -33,11 +33,53 @@ public class FirebaseIdService extends FirebaseInstanceIdService {
         final String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         android.util.Log.i("FirebaseIdService", "[Push Notification] Refreshed token: " + refreshedToken);
 
+        String server_url = getString(R.string.registration_server_url);
+        new AsyncPost().execute(server_url, refreshedToken);
+
         UIThreadDispatcher.dispatch(new Runnable() {
             @Override
             public void run() {
                 LinphonePreferences.instance().setPushNotificationRegistrationID(refreshedToken);
             }
         });
+    }
+
+    private static class AsyncPost extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... params) {
+            if (params[0] == null || params[1] == null) {
+                return null;
+            }
+            URL url;
+            try {
+                url = new URL("http://" + params[0]);
+            } catch (MalformedURLException e) {
+                android.util.Log.i("FirebaseIdService", "[Push Notification] Invalid server URL");
+                return null;
+            }
+
+            String body = "register=" + params[1];
+            byte bodyByte[] = body.getBytes();
+
+            HttpURLConnection con = null;
+            try {
+                con = (HttpURLConnection) url.openConnection();
+                con.setDoOutput(true);
+                con.setUseCaches(false);
+                con.setFixedLengthStreamingMode(bodyByte.length);
+                con.setRequestMethod("POST");
+                OutputStream out = con.getOutputStream();
+                out.write(bodyByte);
+                out.flush();
+                out.close();
+            } catch (IOException e) {
+                android.util.Log.i("FirebaseIdService", "[Push Notification] Unable to send token to server");
+            } finally {
+                if (con != null) {
+                    con.disconnect();
+                }
+            }
+            return null;
+        }
     }
 }
