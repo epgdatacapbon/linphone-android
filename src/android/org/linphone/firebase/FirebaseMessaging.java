@@ -35,6 +35,7 @@ import java.util.Map;
 import org.linphone.compatibility.Compatibility;
 import org.linphone.LinphoneLauncherActivity;
 import org.linphone.LinphoneManager;
+import org.linphone.LinphonePreferences;
 import org.linphone.LinphoneService;
 import org.linphone.R;
 import org.linphone.UIThreadDispatcher;
@@ -50,6 +51,11 @@ public class FirebaseMessaging extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         android.util.Log.i("FirebaseMessaging","[Push Notification] Received");
+
+        LinphonePreferences.instance().setContext(getBaseContext());
+        if (!LinphonePreferences.instance().isPushNotificationEnabled()) {
+            return;
+        }
 
         acquireWakeLock(WAKE_TIME);
 
