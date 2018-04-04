@@ -804,10 +804,10 @@ public final class LinphoneService extends Service {
 			Log.d("Task removed, stop service");
 
 			// If push is enabled, don't unregister account, otherwise do unregister
-			if (LinphonePreferences.instance().isPushNotificationEnabled()) {
-				LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
-				if (lc != null) lc.setNetworkReachable(false);
-			}
+//			if (LinphonePreferences.instance().isPushNotificationEnabled()) {
+//				LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
+//				if (lc != null) lc.setNetworkReachable(false);
+//			}
 			stopSelf();
 		}
 		super.onTaskRemoved(rootIntent);
