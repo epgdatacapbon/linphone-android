@@ -93,7 +93,10 @@ public class FirebaseMessaging extends FirebaseMessagingService {
         Compatibility.CreateChannel(this);
 
         Intent notifIntent = new Intent(Intent.ACTION_CALL)
-                .setData(Uri.parse("tel:" + num)).setClass(this, LinphoneLauncherActivity.class);
+                .setClass(this, LinphoneLauncherActivity.class);
+        if (num != null && !num.isEmpty()) {
+            notifIntent.setData(Uri.parse("tel:" + num));
+        }
         PendingIntent mNotifContentIntent = PendingIntent.getActivity(
                 this, 0, notifIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         
