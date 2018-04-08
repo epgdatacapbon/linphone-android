@@ -53,7 +53,7 @@ public class FirebaseIdService extends FirebaseInstanceIdService {
         });
     }
 
-    private static class AsyncPost extends AsyncTask<String, Void, Void> {
+    private class AsyncPost extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... params) {
             if (params[0] == null || params[1] == null) {
