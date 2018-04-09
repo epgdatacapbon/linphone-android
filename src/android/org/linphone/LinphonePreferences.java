@@ -1153,7 +1153,7 @@ public class LinphonePreferences {
 
 	public void setPushNotificationEnabled(boolean enable) {
 		 getConfig().setBool("app", "push_notification", enable);
-
+*
 		 LinphoneCore lc = getLc();
 		 if (lc == null) {
 			 return;
@@ -1188,6 +1188,7 @@ public class LinphonePreferences {
 				 lc.refreshRegisters();
 			 }
 		 }
+*/
 	}
 
 	public boolean isPushNotificationEnabled() {
